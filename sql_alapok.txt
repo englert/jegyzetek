@@ -1,0 +1,113 @@
+/*Adatbázis létrehozása*/
+create	database abnev
+default character set utf8 /*latin2 iso 8859-2*/
+collate utf8_hungarian_ci;
+
+/*Tábla létrehozása*/
+create table tnev(
+m1nev tipus(hossz) egyéb opciók,
+m2nev tipus(hossz) egyéb opciók,
+...);
+/*tipus: varchar, int, 
+hossz: nem kötelező megadni
+egyéb opciók: 	Primary Key - elsődleges kulcs
+				auto_increment - automatikus kitöltés
+				not null - kötelező kitölteni*/
+				
+				
+				
+/*Lekérdezések*/
+select megjelenítendő dolgok 
+	m1nev
+	m1nev AS 'mező felirata, mi adjuk meg'
+	m1nev, m2nev
+	függvény eredménye, 
+	függvények: sum(), avg(), count(), min(), max()
+from felhasznált táblák 
+	tnev1
+	tnev1, tnev2
+where feltétel(ek)
+	m1nev='érték1'	/* =, <=, >=, <, >, != */
+	m1nev='érték1' AND m2nev='érték2'
+	m1nev='érték1' OR m2nev='érték2'
+	m1nev like '%valami%' /*tartalmazza-e*/
+	m1nev between érték1 and érték2 /* é1<= m1<=é2 */
+group by m1nev		  /* csoportosítás */
+		 m1nev, m2nev /*balról jobbra */
+having csoportosításra vonatkozó feltétel
+order by m1nev ASC /* növekvő rendezés*/
+		 m1nev DESC /* csökkenő rendezés*/
+		 m1nev asc, m2nev desc
+		 m1nev ASC limit 1 /*rendezés utáni legelsőt adja*/
+		 m1nev ASC limit 3 /*rendezés utáni első hármat adja*/
+		 m1nev ASC limit 5,1  /*rendezés utáni az 5-ik indexű elemtől 1-et ad /6-ik elem)
+								indexelés 0-tól kezdődik*/
+		 m1nev ASC limit 3,5	/*4-5-6-7-8-elemeket adja	*/
+		 
+		 
+Több tábla esetén:
+	a feltételeknél mindig a táblák összekapcsolásával kezdünk:
+		2 tábla esetén:
+		WHERE t1.m1=t2.m2 AND ...
+		3 tábla esetén:
+		WHERE t1.m1=t2.m21 AND t2.m22=t3.m3 AND...
+vagy: 
+2 tábla esetén:		 
+		 SELECT ...
+		 FROM t1
+		 INNER JOIN t2
+		 ON t1.m1=t2.m2
+		 .
+		 .
+
+		 
+Adatbázis
+		törlése:
+		DROP DATABASE ab;
+		
+
+Tábla:	törlése:
+		DROP TABLE t1;
+
+		új mező beszúrása:
+		ALTER TABLE t1
+		ADD mx tipus;
+		
+		mező törlése:
+		ALTER TABLE t1
+		DROP COLUMN m1; 
+		
+		típus módosítás:
+		ALTER TABLE t1
+		ALTER(vagy modify) COLUMN m1 datatype;
+		
+		Idegen kulcs hozzáadása:
+		ALTER TABLE t1
+		ADD FOREIGN KEY (m1) REFERENCES t2(m2); 
+		
+Adatok beszúrása:
+		ha minden mezőnek adunk értéket, akkor (m1, m2, m3, ...) elhagyható
+		1 rekord esetén:
+		INSERT INTO t1 (m1, m2, m3, ...)
+		VALUES (é1, é2, é3, ...);
+		több rekord esetén:
+		INSERT INTO t1 (m1, m2, m3, ...)
+		VALUE (é11, é12, é13, ...),
+			  (é21, é22, é23, ...),
+			  (....
+								 );	
+Adatok módosítása:
+		UPDATE t1 
+		SET m1=é1, ..., m2=é2 
+		[WHERE feltétel]	
+Pl.:	UPDATE dolgozo 
+		SET fizetes=fizetes*1.1 	
+		WHERE reszleg_kod=20;
+		
+Adatok törlése:
+		DELETE FROM t1 
+		[WHERE feltétel];
+Pl.: 	DELETE FROM dolgozo 
+		WHERE 2008–szulev>58;
+		
+		
